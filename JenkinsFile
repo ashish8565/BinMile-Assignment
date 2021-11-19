@@ -1,0 +1,66 @@
+node {
+
+    stage("Git Clone"){
+    git branch:'main' , url:'https://github.com/ashish8565/BinMile-Assignment'
+    }
+
+     stage('Docker build for mysql') {
+        sh 'docker build -t mysql ./mysql'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag mysql 390606000562.dkr.ecr.ap-south-1.amazonaws.com/mysql:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/mysql:latest'
+    }
+    
+    stage('Docker build for ElasticSearch') {
+        sh 'docker build -t elasticsearch ./elasticsearch'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag elasticsearch 390606000562.dkr.ecr.ap-south-1.amazonaws.com/elasticsearch:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/elasticsearch:latest'
+    }
+
+     stage('Docker build for Attedence') {
+        sh 'docker build -t attendance ./attendance'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag attendance 390606000562.dkr.ecr.ap-south-1.amazonaws.com/attendance:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/attendance:latest'
+    }
+    
+    stage('Docker build for Salary') {
+        sh 'docker build -t salary ./salary'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag salary 390606000562.dkr.ecr.ap-south-1.amazonaws.com/salary:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/salary:latest'
+    }
+    
+    stage('Docker build for Employee') {
+        sh 'docker build -t employee ./employee'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag employee 390606000562.dkr.ecr.ap-south-1.amazonaws.com/employee:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/employee:latest'
+    }
+    
+     stage('Docker build for frontend') {
+        sh 'docker build -t frontend ./frontend'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag frontend 390606000562.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest'
+    }
+     stage('Docker build for webserver') {
+        sh 'docker build -t webserver ./webserver'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag webserver 390606000562.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest'
+    }
+    
+     stage('Docker build for gateway') {
+        sh 'docker build -t gateway ./gateway'
+        sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 390606000562.dkr.ecr.ap-south-1.amazonaws.com'
+        sh 'docker tag gateway 390606000562.dkr.ecr.ap-south-1.amazonaws.com/gateway:latest'
+        sh 'docker push 390606000562.dkr.ecr.ap-south-1.amazonaws.com/gateway:latest'
+    }
+    
+    stage("kubernetes deployment"){
+        sh 'kubectl apply -f k8s-deployment.yml'
+        sh 'kubectl apply -f k8s-service.yml'
+    }
+} 
