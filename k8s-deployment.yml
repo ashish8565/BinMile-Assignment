@@ -1,104 +1,121 @@
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-db
-spec:
-  selector:
+  labels:
     app: empms-db
-  ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
+spec:
+  containers:
+  - name: empms-db
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/mysql:latest
+    ports:
+    - containerPort: 3306
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: "password"
+    - name: MYSQL_DATABASE
+      value: "attendancedb"
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-es
-spec:
-  selector:
+  labels:
     app: empms-es
-  ports:
-    - protocol: TCP
-      port: 9200
-      targetPort: 9200
+spec:
+  containers:
+  - name: empms-es
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/elasticsearch:latest
+    ports:
+    - containerPort: 9200
+    env:
+    - name: ES_JAVA_OPTS
+      value: "-Xmx512m -Xms512m"
+    - name: ELASTIC_PASSWORD
+      value: "elastic"
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-attendance
-spec:
-  selector:
+  labels:
     app: empms-attendance
-  ports:
-    - protocol: TCP
-      port: 8081
-      targetPort: 8081
+spec:
+  containers:
+  - name: empms-attendance
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/attendance:latest
+    ports:
+    - containerPort: 8081
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-salary
-spec:
-  selector:
+  labels:
     app: empms-salary
-  ports:
-    - protocol: TCP
-      port: 8082
-      targetPort: 8082
+spec:
+  containers:
+  - name: empms-salary
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/salary:latest
+    ports:
+    - containerPort: 8082
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-employee
-spec:
-  selector:
+  labels:
     app: empms-employee
-  ports:
-    - protocol: TCP
-      port: 8083
-      targetPort: 8083
+spec:
+  containers:
+  - name: empms-employee
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/employee:latest
+    ports:
+    - containerPort: 8083
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-frontend
-spec:
-  selector:
+  labels:
     app: empms-frontend
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 5000
+spec:
+  containers:
+  - name: empms-frontend
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest
+    ports:
+    - containerPort: 5000
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-webserver
-spec:
-  selector:
+  labels:
     app: empms-webserver
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+spec:
+  containers:
+  - name: empms-webserver
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/webserver:latest
+    ports:
+    - containerPort: 80
 
 ---
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
   name: empms-gateway
-spec:
-  selector:
+  labels:
     app: empms-gateway
-  ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+spec:
+  containers:
+  - name: empms-gateway
+    image: 390606000562.dkr.ecr.ap-south-1.amazonaws.com/gateway:latest
+    ports:
+    - containerPort: 8080
